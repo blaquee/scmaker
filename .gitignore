@@ -5,3 +5,4 @@
 *.pdb
 *.ilk
 *.exp
+/.vscode/scmaker.code-workspace
