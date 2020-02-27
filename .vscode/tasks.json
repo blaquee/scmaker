@@ -1,0 +1,86 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "asmjit_compile",
+            "command": "cl.exe",
+            "args": [
+                "/nologo",
+                "/LD",
+                "/O2", //optimize for speed
+                "/EHsc",
+                "/W3",
+                "/WX-",
+                "/Gd", //cdecl
+                "/Oi",
+                "/GS-",
+                "/GR-",
+                "/GF",
+                "/Zc:inline",
+                "/TP", //compile as C++
+                "/I",
+                "${workspaceFolder}\\include\\asmjit",
+                "/D NDEBUG",
+                "/D _MBCS",
+                //"/D ASMJIT_STATIC",
+                "/D ASMJIT_BUILD_X86",
+                "/Zc:wchar_t",
+                "/MT",
+                "/MP",
+                "/LD",
+                "/Fe${workspaceFolder}\\bin\\asmjit",
+                "/Fo:",
+                "${workspaceFolder}\\obj\\",
+                "${workspaceFolder}\\include\\asmjit\\core\\*.cpp",
+                "${workspaceFolder}\\include\\asmjit\\x86\\*.cpp",
+                //"/link",
+                //"/LIBPATH:${workspaceFolder}\\obj\\",
+                //"/OUT:${workspaceFolder}\\lib\\asmjit.lib",
+
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher":[
+                "$msCompile"
+            ],      
+        },
+        {
+            "type": "shell",
+            "dependsOn":["asmjit_compile"],
+            "label": "build main",
+            "command": "cl.exe",
+            "args": [
+                "/I",
+                "${workspaceFolder}\\include",
+                "/Zi",
+                "/EHsc",
+                "/MT",
+                "/Fo:",
+                "${workspaceFolder}\\obj\\",
+                "/Fe:",
+                "${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe",
+                "${file}",
+                "/link",
+                "/LIBPATH:${workspaceFolder}\\obj\\",
+                "${workspaceFolder}\\bin\\asmjit.lib"
+            ],
+            "problemMatcher": [
+                "$gcc",
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
